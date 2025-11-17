@@ -4,6 +4,13 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 export default function Navbar() {
+  const scrollToContact = () => {
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
@@ -26,7 +33,10 @@ export default function Navbar() {
             position: 'absolute',
             left: '32px',
             top: '50%',
-            transform: 'translateY(-50%)'
+            transform: 'translateY(-50%)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
           }}
         >
           <Image
@@ -34,9 +44,10 @@ export default function Navbar() {
             alt="Alphe.AI Logo"
             width={80}
             height={24}
-            className="object-contain w-[50px] md:w-[60px] h-auto"
+            className="object-contain w-[35px] md:w-[40px] h-auto"
             priority
           />
+          <span style={{ color: 'black', fontSize: '28px', fontWeight: '600' }}>Alphe AI</span>
         </div>
 
         {/* Action Button */}
@@ -44,6 +55,7 @@ export default function Navbar() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
+          onClick={scrollToContact}
           className="bg-transparent border-2 border-black rounded-full text-black font-semibold text-sm md:text-base whitespace-nowrap hover:bg-black hover:text-white transition-all duration-300"
           style={{
             position: 'absolute',

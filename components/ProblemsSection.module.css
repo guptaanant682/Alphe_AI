@@ -1,0 +1,181 @@
+/* Problems Section Styles */
+.problemsSection {
+  padding: 80px 24px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.problemsContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.problemsTitle {
+  font-size: 56px;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+  margin-bottom: 32px;
+  padding: 0 16px;
+}
+
+.problemsSubtitle {
+  font-size: 24px;
+  color: #4b5563;
+  text-align: center;
+  margin-bottom: 56px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 24px;
+}
+
+/* Highlight Box - 94% Width Background with Centered Content */
+.highlightBoxWrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 56px auto;
+  background: #1f2937;
+  padding: 56px 48px;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(31, 41, 55, 0.3);
+}
+
+.highlightBoxContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.highlightBoxTitle {
+  font-size: 48px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.highlightBoxText {
+  font-size: 24px;
+  color: white;
+  line-height: 1.5;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.problemsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.problemCard {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.problemCard:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+.problemIconBox {
+  background: #1f2937;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.problemCardTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.problemCardText {
+  color: #4b5563;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.securityCard {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 40px;
+  transition: all 0.3s ease;
+}
+
+.securityCard:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.securityCardInner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.resultBox {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  color: white;
+  border-radius: 24px;
+  padding: 48px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.resultBoxText {
+  font-size: 24px;
+  line-height: 1.6;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .problemsTitle {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 768px) {
+  .problemsTitle {
+    font-size: 36px;
+  }
+
+  .problemsSubtitle {
+    font-size: 20px;
+  }
+
+  .highlightBoxTitle {
+    font-size: 36px;
+  }
+
+  .highlightBoxText {
+    font-size: 20px;
+  }
+
+  .problemsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .securityCardInner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

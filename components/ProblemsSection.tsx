@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { DollarSign, Zap, Network, Shield } from 'lucide-react';
-import styles from './Components.module.css';
+import styles from './ProblemsSection.module.css';
 
 export default function ProblemsSection() {
   const problems = [
@@ -47,18 +47,20 @@ export default function ProblemsSection() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className={styles.highlightBox}
+          className={styles.highlightBoxWrapper}
         >
-          <h2 className={styles.highlightBoxTitle}>
-            The $1.5 Trillion AI Infrastructure Crisis
-          </h2>
-          <p className={styles.highlightBoxText}>
-            The market is desperately seeking solutions to the &apos;Fragmented AI Stack Chaos&apos;
-          </p>
+          <div className={styles.highlightBoxContent}>
+            <h2 className={styles.highlightBoxTitle}>
+              The $1.5 Trillion AI Infrastructure Crisis
+            </h2>
+            <p className={styles.highlightBoxText}>
+              The market is desperately seeking solutions to the &apos;Fragmented AI Stack Chaos&apos;
+            </p>
+          </div>
         </motion.div>
 
         <div className={styles.problemsGrid}>

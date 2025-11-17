@@ -1,12 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import styles from './Components.module.css';
 
 export default function Hero() {
   return (
-    <section className={styles.heroSection}>
+    <section className={styles.heroSection} style={{ marginTop: '15vh' }}>
       <div className={styles.heroContainer}>
         {/* Logo */}
         <motion.div
@@ -15,14 +14,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className={styles.heroLogo}
         >
-          <Image
-            src="/logo.png"
-            alt="Alphe.AI"
-            width={300}
-            height={100}
-            style={{ width: 'auto', height: 'auto', maxWidth: '300px' }}
-            priority
-          />
+          <h1 style={{ fontSize: '96px', fontWeight: '700', color: '#111827', margin: 0 }}>Alphe AI</h1>
         </motion.div>
 
         {/* Tagline */}

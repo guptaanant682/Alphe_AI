@@ -1,5 +1,5 @@
 import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
+import { Hero } from '@/components/ui/animated-hero';
 import TrustSection from '@/components/TrustSection';
 import ProblemsSection from '@/components/ProblemsSection';
 import SolutionsSection from '@/components/SolutionsSection';

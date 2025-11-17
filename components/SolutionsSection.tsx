@@ -1,335 +1,443 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Brain, Target, DollarSign, Cloud, Shield, Zap, Rocket } from 'lucide-react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import styles from './Components.module.css';
+import { Target, DollarSign, Cloud, Shield, Zap, Rocket, Brain, X } from 'lucide-react';
+import styles from './SolutionsSection.module.css';
 
-gsap.registerPlugin(ScrollTrigger);
-
-interface SolutionNode {
+interface Solution {
   id: string;
   icon: React.ElementType;
   title: string;
-  subtitle: string;
   description: string;
-  stats?: {
-    label: string;
-    value: string;
-  }[];
-  position: {
-    x: number;
-    y: number;
-  };
+  stats: { label: string; value: string }[];
 }
 
 export default function SolutionsSection() {
-  const [selectedNode, setSelectedNode] = useState<string | null>('core');
-  const sectionRef = useRef<HTMLElement>(null);
-  const nodesRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [selectedSolution, setSelectedSolution] = useState<string | null>(null);
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
-  // Hexagonal constellation layout - Core in center, 6 nodes around it
-  const solutions: SolutionNode[] = [
-    {
-      id: 'core',
-      icon: Brain,
-      title: 'Alphe.AI Core',
-      subtitle: 'Cognitive Infrastructure',
-      description: "The world's first AI infrastructure that actually thinks. Our cognitive layer processes every request through six specialized agents before executing.",
-      stats: [
-        { label: 'Token Savings', value: '80%' },
-        { label: 'Cost Reduction', value: '70%' },
-        { label: 'AI Models', value: '300+' },
-        { label: 'Response Time', value: '<2s' },
-      ],
-      position: { x: 50, y: 50 },
-    },
+  const solutions: Solution[] = [
     {
       id: 'cognitive',
       icon: Target,
       title: 'Cognitive Orchestration',
-      subtitle: 'Intelligent Request Processing',
-      description: 'Advanced multi-agent system that analyzes, optimizes, and routes every AI request through specialized cognitive pathways for maximum efficiency.',
+      description: 'Advanced multi-agent system that analyzes, optimizes, and routes every AI request through specialized cognitive pathways.',
       stats: [
         { label: 'Agent Accuracy', value: '99.2%' },
         { label: 'Processing Speed', value: '0.8s' },
-        { label: 'Smart Routing', value: '100%' },
       ],
-      position: { x: 50, y: 20 },
     },
     {
       id: 'cost',
       icon: DollarSign,
       title: 'Cost Intelligence',
-      subtitle: 'Predictive Cost Optimization',
-      description: 'Real-time cost analysis and optimization. Our AI predicts and reduces costs before requests are even made, ensuring you never overpay.',
+      description: 'Real-time cost analysis and optimization. Our AI predicts and reduces costs before requests are made.',
       stats: [
         { label: 'Avg. Savings', value: '$12K/mo' },
         { label: 'ROI', value: '400%+' },
-        { label: 'Waste Prevention', value: '90%' },
       ],
-      position: { x: 76, y: 35 },
     },
     {
       id: 'infrastructure',
       icon: Cloud,
-      title: 'AI Infrastructure',
-      subtitle: 'Unified Platform Layer',
-      description: 'One platform, 300+ models. Seamlessly switch between providers without changing a single line of code. True infrastructure freedom.',
+      title: 'Unified Infrastructure',
+      description: 'One platform, 300+ models. Seamlessly switch between providers without changing a single line of code.',
       stats: [
         { label: 'Uptime', value: '99.99%' },
-        { label: 'Providers', value: '15+' },
         { label: 'Models', value: '300+' },
       ],
-      position: { x: 76, y: 65 },
     },
     {
       id: 'security',
       icon: Shield,
       title: 'Enterprise Security',
-      subtitle: 'Zero-Trust Architecture',
-      description: 'Built-in compliance, audit trails, and enterprise-grade security. SOC 2 Type II certified with complete data sovereignty.',
+      description: 'Built-in compliance, audit trails, and enterprise-grade security. SOC 2 Type II certified.',
       stats: [
         { label: 'Compliance', value: 'SOC 2' },
         { label: 'Encryption', value: 'AES-256' },
-        { label: 'Audit Logs', value: '100%' },
       ],
-      position: { x: 50, y: 80 },
     },
     {
       id: 'deployment',
       icon: Zap,
       title: 'Instant Deployment',
-      subtitle: 'Zero Configuration Setup',
-      description: 'From zero to production in under 5 minutes. No DevOps required, no complex configurations, just instant AI infrastructure.',
+      description: 'From zero to production in under 5 minutes. No DevOps required, no complex configurations.',
       stats: [
         { label: 'Setup Time', value: '<5min' },
         { label: 'Config Needed', value: '0' },
-        { label: 'Deployment', value: 'Instant' },
       ],
-      position: { x: 24, y: 65 },
     },
-    {
-      id: 'evolution',
-      icon: Rocket,
-      title: 'Auto Evolution',
-      subtitle: 'Self-Improving Systems',
-      description: 'Your infrastructure gets smarter over time. Machine learning algorithms continuously optimize performance based on your usage patterns.',
-      stats: [
-        { label: 'Learning Rate', value: 'Real-time' },
-        { label: 'Optimizations', value: 'Daily' },
-        { label: 'Improvement', value: '+5%/mo' },
-      ],
-      position: { x: 24, y: 35 },
-    },
+    // {
+    //   id: 'evolution',
+    //   icon: Rocket,
+    //   title: 'Auto Evolution',
+    //   description: 'Your infrastructure gets smarter over time with continuous ML-driven optimizations.',
+    //   stats: [
+    //     { label: 'Learning Rate', value: 'Real-time' },
+    //     { label: 'Improvement', value: '+5%/mo' },
+    //   ],
+    // },
   ];
 
-  useEffect(() => {
-    const nodes = nodesRef.current;
-
-    nodes.forEach((node, index) => {
-      if (!node) return;
-
-      gsap.set(node, {
-        scale: 0,
-        opacity: 0,
-      });
-
-      gsap.to(node, {
-        scale: 1,
-        opacity: 1,
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: 'back.out(1.7)',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          end: 'top 30%',
-          toggleActions: 'play none none reverse',
-        },
-      });
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
-
-  const getNodeStyle = (position: { x: number; y: number }, isCore: boolean) => {
-    return {
-      position: 'absolute' as const,
-      left: `${position.x}%`,
-      top: `${position.y}%`,
-      transform: 'translate(-50%, -50%)',
-      zIndex: isCore ? 10 : 5,
-    };
+  const coreData = {
+    id: 'core',
+    icon: Brain,
+    title: 'Alphe.AI Core',
+    description: "The world's first AI infrastructure that actually thinks. Our cognitive layer processes every request through six specialized agents, intelligently routing tasks to the optimal model while continuously learning from patterns. Each agent masters a specific domain—cost optimization, quality assurance, performance monitoring, security validation, workflow orchestration, and predictive analytics—working in concert to deliver unmatched efficiency and reliability.",
+    stats: [
+      { label: 'Token Savings', value: '80%' },
+      { label: 'Cost Reduction', value: '70%' },
+      { label: 'AI Models', value: '300+' },
+      { label: 'Response Time', value: '<2s' },
+    ],
   };
 
-  const selectedSolution = solutions.find((s) => s.id === selectedNode);
+  const getSelectedData = () => {
+    if (selectedSolution === 'core') return coreData;
+    return solutions.find(s => s.id === selectedSolution);
+  };
+
+  const selectedData = getSelectedData();
 
   return (
-    <section ref={sectionRef} className={styles.solutionsSection}>
-      <div className={styles.solutionsContainer}>
-        <motion.h2
+    <section className={styles.solutionsSection}>
+      {/* Background Grid Pattern */}
+      <div className={styles.backgroundPattern}>
+        <div className={styles.patternGrid} />
+      </div>
+
+      <div className={styles.container}>
+        {/* Header */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className={styles.solutionsTitle}
+          className={styles.header}
         >
-          How Alphe.AI Solves These Problems
-        </motion.h2>
+          <h2 className={styles.title}>
+            How Alphe.AI Solves These Problems
+          </h2>
+          <p className={styles.subtitle}>
+            Click on any feature to explore how our AI infrastructure revolutionizes your workflow
+          </p>
+        </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className={styles.solutionsSubtitle}
-        >
-          Interactive solution engine - click on any node to explore our revolutionary approach
-        </motion.p>
-
-        {/* Interactive Node Network */}
-        <div className={styles.nodesContainer}>
-          {/* Connection Lines */}
-          <svg className={styles.connectionsSvg} xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style={{ stopColor: '#1f2937', stopOpacity: 0.2 }} />
-                <stop offset="50%" style={{ stopColor: '#1f2937', stopOpacity: 0.6 }} />
-                <stop offset="100%" style={{ stopColor: '#1f2937', stopOpacity: 0.2 }} />
-              </linearGradient>
-            </defs>
-
-            {/* Lines from core to other nodes */}
-            {solutions.slice(1).map((solution, index) => (
-              <motion.line
-                key={solution.id}
-                x1="50%"
-                y1="50%"
-                x2={`${solution.position.x}%`}
-                y2={`${solution.position.y}%`}
-                stroke="url(#lineGradient)"
-                strokeWidth="2"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{
-                  pathLength: 1,
-                  opacity: selectedNode === solution.id || selectedNode === 'core' ? 0.8 : 0.3
-                }}
-                transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
-              />
-            ))}
-          </svg>
-
-          {/* Solution Nodes */}
-          {solutions.map((solution, index) => {
-            const Icon = solution.icon;
-            const isCore = solution.id === 'core';
-            const isSelected = selectedNode === solution.id;
-
-            return (
-              <div
-                key={solution.id}
-                ref={(el) => {
-                  nodesRef.current[index] = el;
-                }}
-                style={getNodeStyle(solution.position, isCore)}
-                className={`${styles.solutionNode} ${isCore ? styles.coreNode : ''} ${
-                  isSelected ? styles.selectedNode : ''
-                }`}
-                onClick={() => setSelectedNode(solution.id)}
-              >
-                <div className={styles.nodeIcon}>
-                  <Icon size={isCore ? 32 : 24} />
-                </div>
-                <div className={styles.nodeLabel}>{solution.title}</div>
-
-                {/* Pulse animation for selected node */}
-                {isSelected && (
-                  <motion.div
-                    className={styles.nodePulse}
-                    initial={{ scale: 1, opacity: 0.6 }}
-                    animate={{ scale: 1.8, opacity: 0 }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      ease: 'easeOut',
-                    }}
-                  />
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Solution Details Panel */}
-        <AnimatePresence mode="wait">
-          {selectedSolution && (
+        {/* Bento Grid */}
+        <div className={styles.gridWrapper}>
+          <div className={styles.bentoGrid}>
+            {/* Core Card */}
             <motion.div
-              key={selectedSolution.id}
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
-              className={styles.solutionDetails}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className={styles.coreCard}
             >
-              <div className={styles.detailsHeader}>
-                {(() => {
-                  const Icon = selectedSolution.icon;
-                  return (
-                    <motion.div
-                      className={styles.detailsIconBox}
-                      initial={{ rotate: -180, scale: 0 }}
-                      animate={{ rotate: 0, scale: 1 }}
-                      transition={{ duration: 0.6, ease: 'backOut' }}
-                    >
-                      <Icon size={40} />
-                    </motion.div>
-                  );
-                })()}
-                <div>
-                  <h3 className={styles.detailsTitle}>{selectedSolution.title}</h3>
-                  <p className={styles.detailsSubtitle}>{selectedSolution.subtitle}</p>
-                </div>
-              </div>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className={styles.detailsDescription}
+              <motion.div
+                onClick={() => setSelectedSolution('core')}
+                onHoverStart={() => setHoveredCard('core')}
+                onHoverEnd={() => setHoveredCard(null)}
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.3 }}
+                className={`${styles.card} ${
+                  selectedSolution === 'core' ? styles.cardSelected : styles.cardDefault
+                }`}
               >
-                {selectedSolution.description}
-              </motion.p>
-
-              {selectedSolution.stats && (
+                {/* Icon */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className={styles.statsGrid}
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                  className={`${styles.iconBox} ${
+                    selectedSolution === 'core' ? styles.iconBoxSelected : ''
+                  }`}
                 >
-                  {selectedSolution.stats.map((stat, index) => (
+                  <Brain style={{ width: '32px', height: '32px', color: 'white' }} />
+                </motion.div>
+
+                {/* Content */}
+                <h3 className={`${styles.cardTitle} ${
+                  selectedSolution === 'core' ? styles.cardTitleSelected : ''
+                }`}>
+                  {coreData.title}
+                </h3>
+                <p className={`${styles.cardDescription} ${
+                  selectedSolution === 'core' ? styles.cardDescriptionSelected : ''
+                }`}>
+                  {coreData.description}
+                </p>
+
+                {/* Stats Grid */}
+                <div className={styles.statsGrid}>
+                  {coreData.stats.map((stat, index) => (
                     <motion.div
                       key={stat.label}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.4 + index * 0.1 }}
-                      className={styles.statCard}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                      className={`${styles.statBox} ${
+                        selectedSolution === 'core' ? styles.statBoxSelected : ''
+                      }`}
                     >
-                      <div className={styles.statValue}>{stat.value}</div>
-                      <div className={styles.statLabel}>{stat.label}</div>
+                      <div className={`${styles.statValue} ${
+                        selectedSolution === 'core' ? styles.statValueSelected : ''
+                      }`}>
+                        {stat.value}
+                      </div>
+                      <div className={`${styles.statLabel} ${
+                        selectedSolution === 'core' ? styles.statLabelSelected : ''
+                      }`}>
+                        {stat.label}
+                      </div>
                     </motion.div>
                   ))}
-                </motion.div>
-              )}
+                </div>
+              </motion.div>
             </motion.div>
-          )}
-        </AnimatePresence>
+
+            {/* Feature Cards */}
+            {solutions.map((solution, index) => {
+              const Icon = solution.icon;
+              const isSelected = selectedSolution === solution.id;
+
+              return (
+                <motion.div
+                  key={solution.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
+                  className={styles.featureCard}
+                >
+                  <motion.div
+                    onClick={() => setSelectedSolution(solution.id)}
+                    onHoverStart={() => setHoveredCard(solution.id)}
+                    onHoverEnd={() => setHoveredCard(null)}
+                    whileHover={{ y: -4 }}
+                    transition={{ duration: 0.3 }}
+                    className={`${styles.card} ${
+                      isSelected ? styles.cardSelected : styles.cardDefault
+                    }`}
+                  >
+                    {/* Icon */}
+                    <motion.div
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.6 }}
+                      className={`${styles.iconBox} ${styles.featureIconBox} ${
+                        isSelected ? styles.iconBoxSelected : ''
+                      }`}
+                    >
+                      <Icon style={{ width: '28px', height: '28px', color: 'white' }} />
+                    </motion.div>
+
+                    {/* Content */}
+                    <h3 className={`${styles.featureTitle} ${styles.cardTitle} ${
+                      isSelected ? styles.cardTitleSelected : ''
+                    }`}>
+                      {solution.title}
+                    </h3>
+                    <p className={`${styles.featureDescription} ${styles.cardDescription} ${
+                      isSelected ? styles.cardDescriptionSelected : ''
+                    }`}>
+                      {solution.description}
+                    </p>
+
+                    {/* Stats Pills */}
+                    <div className={styles.statsPills}>
+                      {solution.stats.map((stat) => (
+                        <div
+                          key={stat.label}
+                          className={`${styles.statPill} ${
+                            isSelected ? styles.statPillSelected : ''
+                          }`}
+                        >
+                          {stat.value} {stat.label}
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
       </div>
+
+      {/* Expanded Detail Modal */}
+      <AnimatePresence>
+        {selectedSolution && selectedData && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedSolution(null)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              backdropFilter: 'blur(8px)',
+              zIndex: 50,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '16px',
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                position: 'relative',
+                maxWidth: '896px',
+                width: '100%',
+                backgroundColor: 'white',
+                borderRadius: '24px',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedSolution(null)}
+                style={{
+                  position: 'absolute',
+                  top: '24px',
+                  right: '24px',
+                  zIndex: 10,
+                  padding: '8px',
+                  borderRadius: '9999px',
+                  backgroundColor: '#f3f4f6',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s',
+                }}
+              >
+                <X style={{ width: '24px', height: '24px', color: '#374151' }} />
+              </button>
+
+              {/* Content */}
+              <div style={{ padding: '48px' }}>
+                {/* Icon & Title */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '24px', marginBottom: '32px' }}>
+                  <div style={{ flexShrink: 0 }}>
+                    <div style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '16px',
+                      backgroundColor: '#1f2937',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                      {(() => {
+                        const Icon = selectedData.icon;
+                        return <Icon style={{ width: '40px', height: '40px', color: 'white' }} />;
+                      })()}
+                    </div>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{
+                      fontSize: '36px',
+                      fontWeight: 700,
+                      color: '#111827',
+                      marginBottom: '12px',
+                      lineHeight: 1.2,
+                    }}>
+                      {selectedData.title}
+                    </h3>
+                    <p style={{
+                      fontSize: '20px',
+                      color: '#4b5563',
+                      lineHeight: 1.6,
+                    }}>
+                      {selectedData.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div style={{
+                  height: '1px',
+                  background: 'linear-gradient(90deg, transparent, #d1d5db, transparent)',
+                  margin: '32px 0',
+                }} />
+
+                {/* Stats Grid */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                  gap: '24px',
+                }}>
+                  {selectedData.stats.map((stat, index) => (
+                    <motion.div
+                      key={stat.label}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      style={{
+                        textAlign: 'center',
+                        padding: '24px',
+                        borderRadius: '16px',
+                        backgroundColor: 'white',
+                        border: '2px solid #e5e7eb',
+                        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                      }}
+                    >
+                      <div style={{
+                        fontSize: '36px',
+                        fontWeight: 700,
+                        color: '#22c55e',
+                        marginBottom: '8px',
+                      }}>
+                        {stat.value}
+                      </div>
+                      <div style={{
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: '#4b5563',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                      }}>
+                        {stat.label}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  style={{
+                    marginTop: '32px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <button style={{
+                    padding: '16px 48px',
+                    backgroundColor: '#1f2937',
+                    color: 'white',
+                    fontWeight: 600,
+                    borderRadius: '9999px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  }}>
+                    Get Started with {selectedData.title}
+                  </button>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

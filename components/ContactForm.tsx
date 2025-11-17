@@ -38,7 +38,7 @@ export default function ContactForm() {
   };
 
   return (
-    <section className={styles.contactSection}>
+    <section id="contact-form" className={styles.contactSection}>
       <div className={styles.contactContainer}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
